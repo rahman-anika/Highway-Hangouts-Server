@@ -69,8 +69,11 @@ async function run ()
         const reviewCollection = database.collection("review");
 
 
-
-
+        // Get all chefs
+        app.get("/allChefs", async (req, res) => {
+            const result = await chefsCollection.find({}).toArray();
+            res.send(result);
+        });
 
 
 
