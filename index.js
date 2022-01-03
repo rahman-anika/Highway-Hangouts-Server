@@ -67,16 +67,32 @@ async function run ()
         const menuCollection = database.collection('menu');
         const recipesCollection = database.collection("recipes");
         const reviewCollection = database.collection("review");
+        const bookingCollection = database.collection("booking");
 
 
         // Get all chefs
-        app.get("/allChefs", async (req, res) => {
+        app.get("/allChefs", async (req, res) =>
+        {
             const result = await chefsCollection.find({}).toArray();
             res.send(result);
         });
 
 
+        app.get('/booking', async (req, res) =>
+        {
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = appointmentsCollect.find(query);
+            const booking = await cursor.toArray();
+            res.json(booking);
+        });
 
+        app.post('/booking', async (req, res) =>
+        {
+            const booking = req.body;
+            const result = await appointmentsCollect.insertOne(booking);
+            res.json(result);
+        });
 
 
 
