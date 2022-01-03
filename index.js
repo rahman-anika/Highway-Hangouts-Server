@@ -119,19 +119,24 @@ async function run() {
 
 
 
+        // Get all breakfast menu item 
 
         app.get('/allbreakfast', async (req, res) => {
             const query = {};
             const cursor = breakfastCollection.find(query);
             const breakfast = await cursor.toArray();
             res.json(breakfast);
-        })
+        });
+
+        // Get all lunch menu item 
+
         app.get('/allLunch', async (req, res) => {
             const query = {};
             const cursor = lunchCollection.find(query);
             const lunch = await cursor.toArray();
             res.json(lunch);
-        })
+        });
+
 
 
 
@@ -194,20 +199,57 @@ async function run() {
 
 
 
-        // get booking 
-        app.get('/getBooking', async (req, res) => {
-            const booking_email = req.query.booking_email;
-            const query = { booking_email: booking_email };
-            const cursor = bookingCollection.find(query);
+        // Get all bookings from database  
+
+        app.get('/booking', async (req, res) => {
+            const cursor = bookingCollection.find({});
             const booking = await cursor.toArray();
-            res.json(booking);
+            res.send(booking);
         });
 
-        // add new booking 
+        // Add new bookings 
 
         app.post('/booking', async (req, res) => {
             const booking = req.body;
             const result = await bookingCollection.insertOne(booking);
+            res.json(result);
+        });
+
+
+        // Get my bookings through email 
+
+        app.get('/booking/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { booking_email: { $eq: email } };
+            const cursor = bookingCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
+
+        // Updating booking status 
+
+        app.put('/booking/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateStatus = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    status: updateStatus.status
+                }
+            };
+            const result = await bookingCollection.updateOne(filter, updateDoc, options);
+            res.json(result);
+        });
+
+
+        // Delete Bookings 
+
+        app.delete('/booking/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await bookingCollection.deleteOne(query);
             res.json(result);
         });
 
