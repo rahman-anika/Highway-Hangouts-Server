@@ -180,6 +180,24 @@ async function run() {
 
 
 
+        // get booking 
+        app.get('/booking', async (req, res) => {
+            const booking_email = req.query.booking_email;
+            const query = { booking_email: booking_email };
+            const cursor = bookingCollection.find(query);
+            const booking = await cursor.toArray();
+            res.json(booking);
+        });
+
+        // add new booking 
+
+        app.post('/booking', async (req, res) => {
+            const booking = req.body;
+            const result = await bookingCollection.insertOne(booking);
+            res.json(result);
+        });
+
+
 
 
     }
