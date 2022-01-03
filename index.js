@@ -65,6 +65,7 @@ async function run() {
         const menuCollection = database.collection('menu');
         const recipesCollection = database.collection("recipes");
         const reviewCollection = database.collection("review");
+        const bookingCollection = database.collection("booking");
 
 
 
@@ -181,7 +182,7 @@ async function run() {
 
 
         // get booking 
-        app.get('/booking', async (req, res) => {
+        app.get('/getBooking', async (req, res) => {
             const booking_email = req.query.booking_email;
             const query = { booking_email: booking_email };
             const cursor = bookingCollection.find(query);
