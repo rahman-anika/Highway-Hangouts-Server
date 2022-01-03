@@ -80,11 +80,9 @@ async function run ()
 
         app.get('/booking', async (req, res) =>
         {
-            const booking_email = req.query.booking_email;
-            const query = { booking_email: booking_email };
-            const cursor = bookingCollection.find(query);
+            const cursor = bookingCollection.find({});
             const booking = await cursor.toArray();
-            res.json(booking);
+            res.send(booking);
         });
 
         app.post('/booking', async (req, res) =>
@@ -94,7 +92,37 @@ async function run ()
             res.json(result);
         });
 
+        app.get('/booking/:email', async (req, res) =>
+        {
+            const email = req.params.email;
+            const query = { booking_email: { $eq: email } };
+            const cursor = bookingCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
 
+        app.put('/booking/:id', async (req, res) =>
+        {
+            const id = req.params.id;
+            const updateStatus = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    status: updateStatus.status
+                }
+            };
+            const result = await bookingCollection.updateOne(filter, updateDoc, options);
+            res.json(result);
+        });
+
+        app.delete('/booking/:id', async (req, res) =>
+        {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await bookingCollection.deleteOne(query);
+            res.json(result);
+        });
 
 
 
