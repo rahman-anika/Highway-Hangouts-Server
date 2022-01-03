@@ -82,7 +82,7 @@ async function run ()
         {
             const email = req.query.email;
             const query = { email: email };
-            const cursor = appointmentsCollect.find(query);
+            const cursor = bookingCollection.find(query);
             const booking = await cursor.toArray();
             res.json(booking);
         });
@@ -90,7 +90,7 @@ async function run ()
         app.post('/booking', async (req, res) =>
         {
             const booking = req.body;
-            const result = await appointmentsCollect.insertOne(booking);
+            const result = await bookingCollection.insertOne(booking);
             res.json(result);
         });
 
