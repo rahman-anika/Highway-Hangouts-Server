@@ -136,6 +136,51 @@ async function run() {
 
 
 
+        // Add new recipe to database
+
+        app.post("/addRecipes", async (req, res) => {
+            console.log(req.body);
+            const result = await recipesCollection.insertOne(req.body);
+            res.send(result);
+        });
+
+        // Get all recipes
+        app.get("/allRecipes", async (req, res) => {
+            const result = await recipesCollection.find({}).toArray();
+            res.send(result);
+        });
+
+
+        // Delete recipe from database 
+
+        app.delete("/deleteRecipe/:id", async (req, res) => {
+            console.log(req.params.id);
+
+            const result = await recipesCollection
+                .deleteOne({ _id: ObjectId(req.params.id) });
+
+            res.send(result);
+
+        });
+
+
+        // Get all recipes by email query from database 
+
+        app.get("/myRecipes/:email", async (req, res) => {
+            console.log(req.params);
+
+
+            const result = await recipesCollection
+                .find({ email: req.params.email })
+                .toArray();
+            // console.log(result);
+            res.send(result);
+
+        });
+
+
+
+
 
     }
 
