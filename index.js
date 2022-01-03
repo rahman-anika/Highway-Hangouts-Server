@@ -80,8 +80,8 @@ async function run ()
 
         app.get('/booking', async (req, res) =>
         {
-            const email = req.query.email;
-            const query = { email: email };
+            const booking_email = req.query.booking_email;
+            const query = { booking_email: booking_email };
             const cursor = bookingCollection.find(query);
             const booking = await cursor.toArray();
             res.json(booking);
