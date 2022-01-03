@@ -62,9 +62,10 @@ async function run() {
 
         const usersCollection = database.collection('users');
         const chefsCollection = database.collection('chefs');
-        const breakfastCollection = database.collection('breakfast');
-        const allLunchCollection = database.collection('lunch');
+        const breakfastCollection = database.collection('allbreakfast');
+        const allLunchCollection = database.collection('AllLunch');
         const recipesCollection = database.collection("recipes");
+        // const bookingCollection = database.collection("menuBooking");
         const reviewCollection = database.collection("review");
 
         app.get('/allbreakfast', async (req, res) => {
@@ -78,11 +79,13 @@ async function run() {
             const cursor = allLunchCollection.find(query);
             const lunch = await cursor.toArray();
             res.json(lunch);
-          })
-
-
-
-
+        })
+        
+        // app.post('/menuBooking', async (req, res) => {
+        //     const information = req.body;
+        //     const result = await bookingCollection.insertOne(information);
+        //     res.json(result);
+        //   })
 
 
 
