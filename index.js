@@ -31,7 +31,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 
 
-async function verifyToken(req, res, next) {
+async function verifyToken (req, res, next)
+{
     if (req.headers?.authorization?.startsWith('Bearer ')) {
         const token = req.headers.authorization.split(' ')[1];
 
@@ -54,7 +55,8 @@ async function verifyToken(req, res, next) {
 
 
 
-async function run() {
+async function run ()
+{
     try {
         await client.connect();
         const database = client.db('highwayHangouts');
@@ -87,10 +89,12 @@ async function run() {
 
 run().catch(console.dir);
 
-app.get('/', (req, res) => {
-    res.send('Hello Highway Hangouts!')
+app.get('/', (req, res) =>
+{
+    res.send('Hello from Highway Hangouts server!')
 })
 
-app.listen(port, () => {
+app.listen(port, () =>
+{
     console.log(`listening at ${port}`)
 })
