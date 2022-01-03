@@ -66,7 +66,9 @@ async function run() {
         const recipesCollection = database.collection("recipes");
         const reviewCollection = database.collection("review");
         const bookingCollection = database.collection("booking");
-
+        const breakfastCollection = database.collection('breakfast');
+        const lunchCollection = database.collection('lunch');
+        const dinnerCollection = database.collection('dinner');
 
 
 
@@ -118,7 +120,18 @@ async function run() {
 
 
 
-
+        app.get('/allbreakfast', async (req, res) => {
+            const query = {};
+            const cursor = breakfastCollection.find(query);
+            const breakfast = await cursor.toArray();
+            res.json(breakfast);
+        })
+        app.get('/allLunch', async (req, res) => {
+            const query = {};
+            const cursor = lunchCollection.find(query);
+            const lunch = await cursor.toArray();
+            res.json(lunch);
+        })
 
 
 
