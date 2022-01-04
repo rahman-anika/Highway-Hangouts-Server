@@ -137,6 +137,15 @@ async function run() {
             res.json(lunch);
         });
 
+        // Get all dinner menu item 
+
+        app.get('/allDinner', async (req, res) => {
+            const query = {};
+            const cursor = dinnerCollection.find(query);
+            const dinner = await cursor.toArray();
+            res.json(dinner);
+        });
+
 
 
 
