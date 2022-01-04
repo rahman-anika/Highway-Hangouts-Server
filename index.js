@@ -64,8 +64,10 @@ async function run() {
         const chefsCollection = database.collection('chefs');
         const breakfastCollection = database.collection('allbreakfast');
         const allLunchCollection = database.collection('AllLunch');
+        const allDinnerCollection = database.collection('allDinner');
+        const bookingCollection = database.collection("booking");
         const recipesCollection = database.collection("recipes");
-        // const bookingCollection = database.collection("menuBooking");
+        // const bookingMenuCollection = database.collection("menuAll");
         const reviewCollection = database.collection("review");
 
         app.get('/allbreakfast', async (req, res) => {
@@ -80,10 +82,26 @@ async function run() {
             const lunch = await cursor.toArray();
             res.json(lunch);
         })
+        app.get('/allDinner', async (req, res) => {
+            const query = {};
+            const cursor = allDinnerCollection.find(query);
+            const dinner = await cursor.toArray();
+            res.json(dinner);
+        })
+
+        // booking insert
+
+        app.post('/booking', async (req, res) => {
+            const information = req.body;
+            const result = await bookingCollection.insertOne(information);
+            res.json(result);
+          })
+
+
         
-        // app.post('/menuBooking', async (req, res) => {
+        // app.post('/menuAll', async (req, res) => {
         //     const information = req.body;
-        //     const result = await bookingCollection.insertOne(information);
+        //     const result = await bookingMenuCollection.insertOne(information);
         //     res.json(result);
         //   })
 
