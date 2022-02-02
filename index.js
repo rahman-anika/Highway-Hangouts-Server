@@ -31,7 +31,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 
 
-async function verifyToken(req, res, next) {
+async function verifyToken (req, res, next)
+{
     if (req.headers?.authorization?.startsWith('Bearer ')) {
         const token = req.headers.authorization.split(' ')[1];
 
@@ -54,7 +55,8 @@ async function verifyToken(req, res, next) {
 
 
 
-async function run() {
+async function run ()
+{
     try {
         await client.connect();
         const database = client.db('highwayHangouts');
@@ -72,7 +74,8 @@ async function run() {
 
 
 
-        app.get('/users/:email', async (req, res) => {
+        app.get('/users/:email', async (req, res) =>
+        {
             const email = req.params.email;
             const query = { email: email };
             const user = await usersCollection.findOne(query);
@@ -83,14 +86,16 @@ async function run() {
             res.json({ admin: isAdmin });
         })
 
-        app.post('/users', async (req, res) => {
+        app.post('/users', async (req, res) =>
+        {
             const user = req.body;
             const result = await usersCollection.insertOne(user);
             console.log(result);
             res.json(result);
         });
 
-        app.put('/users', async (req, res) => {
+        app.put('/users', async (req, res) =>
+        {
             const user = req.body;
             const filter = { email: user.email };
             const options = { upsert: true };
@@ -99,7 +104,8 @@ async function run() {
             res.json(result);
         });
 
-        app.put('/users/admin', verifyToken, async (req, res) => {
+        app.put('/users/admin', verifyToken, async (req, res) =>
+        {
             const user = req.body;
             const requester = req.decodedEmail;
             if (requester) {
@@ -121,7 +127,8 @@ async function run() {
 
         // Get all breakfast menu item 
 
-        app.get('/allbreakfast', async (req, res) => {
+        app.get('/allbreakfast', async (req, res) =>
+        {
             const query = {};
             const cursor = breakfastCollection.find(query);
             const breakfast = await cursor.toArray();
@@ -130,7 +137,8 @@ async function run() {
 
         // Get all lunch menu item 
 
-        app.get('/allLunch', async (req, res) => {
+        app.get('/allLunch', async (req, res) =>
+        {
             const query = {};
             const cursor = lunchCollection.find(query);
             const lunch = await cursor.toArray();
@@ -139,7 +147,8 @@ async function run() {
 
         // Get all dinner menu item 
 
-        app.get('/allDinner', async (req, res) => {
+        app.get('/allDinner', async (req, res) =>
+        {
             const query = {};
             const cursor = dinnerCollection.find(query);
             const dinner = await cursor.toArray();
@@ -153,27 +162,72 @@ async function run() {
 
 
         // Get all chefs
-        app.get("/allChefs", async (req, res) => {
+        app.get("/allChefs", async (req, res) =>
+        {
             const result = await chefsCollection.find({}).toArray();
             res.send(result);
         });
 
 
+        app.get('/booking', async (req, res) =>
+        {
+            const cursor = bookingCollection.find({});
+            const booking = await cursor.toArray();
+            res.send(booking);
+        });
 
+        app.post('/booking', async (req, res) =>
+        {
+            const booking = req.body;
+            const result = await bookingCollection.insertOne(booking);
+            res.json(result);
+        });
 
+        app.get('/booking/:email', async (req, res) =>
+        {
+            const email = req.params.email;
+            const query = { booking_email: { $eq: email } };
+            const cursor = bookingCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
 
+        app.put('/booking/:id', async (req, res) =>
+        {
+            const id = req.params.id;
+            const updateStatus = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    status: updateStatus.status
+                }
+            };
+            const result = await bookingCollection.updateOne(filter, updateDoc, options);
+            res.json(result);
+        });
+
+        app.delete('/booking/:id', async (req, res) =>
+        {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await bookingCollection.deleteOne(query);
+            res.json(result);
+        });
 
 
         // Add new recipe to database
 
-        app.post("/addRecipes", async (req, res) => {
+        app.post("/addRecipes", async (req, res) =>
+        {
             console.log(req.body);
             const result = await recipesCollection.insertOne(req.body);
             res.send(result);
         });
 
         // Get all recipes
-        app.get("/allRecipes", async (req, res) => {
+        app.get("/allRecipes", async (req, res) =>
+        {
             const result = await recipesCollection.find({}).toArray();
             res.send(result);
         });
@@ -181,7 +235,8 @@ async function run() {
 
         // Delete recipe from database 
 
-        app.delete("/deleteRecipe/:id", async (req, res) => {
+        app.delete("/deleteRecipe/:id", async (req, res) =>
+        {
             console.log(req.params.id);
 
             const result = await recipesCollection
@@ -194,7 +249,8 @@ async function run() {
 
         // Get all recipes by email query from database 
 
-        app.get("/myRecipes/:email", async (req, res) => {
+        app.get("/myRecipes/:email", async (req, res) =>
+        {
             console.log(req.params);
 
 
@@ -210,7 +266,8 @@ async function run() {
 
         // Get all bookings from database  
 
-        app.get('/booking', async (req, res) => {
+        app.get('/booking', async (req, res) =>
+        {
             const cursor = bookingCollection.find({});
             const booking = await cursor.toArray();
             res.send(booking);
@@ -218,7 +275,8 @@ async function run() {
 
         // Add new bookings 
 
-        app.post('/booking', async (req, res) => {
+        app.post('/booking', async (req, res) =>
+        {
             const booking = req.body;
             const result = await bookingCollection.insertOne(booking);
             res.json(result);
@@ -227,7 +285,8 @@ async function run() {
 
         // Get my bookings through email 
 
-        app.get('/booking/:email', async (req, res) => {
+        app.get('/booking/:email', async (req, res) =>
+        {
             const email = req.params.email;
             const query = { booking_email: { $eq: email } };
             const cursor = bookingCollection.find(query);
@@ -238,7 +297,8 @@ async function run() {
 
         // Updating booking status 
 
-        app.put('/booking/:id', async (req, res) => {
+        app.put('/booking/:id', async (req, res) =>
+        {
             const id = req.params.id;
             const updateStatus = req.body;
             const filter = { _id: ObjectId(id) };
@@ -255,7 +315,8 @@ async function run() {
 
         // Delete Bookings 
 
-        app.delete('/booking/:id', async (req, res) => {
+        app.delete('/booking/:id', async (req, res) =>
+        {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await bookingCollection.deleteOne(query);
@@ -275,10 +336,12 @@ async function run() {
 
 run().catch(console.dir);
 
-app.get('/', (req, res) => {
-    res.send('Hello Highway Hangouts!')
+app.get('/', (req, res) =>
+{
+    res.send('Hello from Highway Hangouts server!')
 })
 
-app.listen(port, () => {
+app.listen(port, () =>
+{
     console.log(`listening at ${port}`)
 })
