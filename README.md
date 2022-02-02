@@ -1,17 +1,22 @@
-Highway Hangouts
+# Highway Hangouts
 
 This is a complete MERN stack website based on restaurant where mainly focused on different types of menu, table reservation, recipes, share recipes, menu items, etc.
-Deployment
+
+## Deployment
 
 Live Site Link
 
+```bash
 https://highway-hangouts.web.app
+```
 
 Live Server Link
 
+```bash
 https://stark-savannah-40498.herokuapp.com/
+```
 
-Usage
+## Usage
 
 - This is a complete MERN stack website based on restaurant. Two types authentications are used: Email/Password and google login
 - JWT Token is used to make it more secure
